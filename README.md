@@ -31,7 +31,7 @@ This tool is designed for creative agencies, marketers, and content creators wor
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Component | Technology |
 |-----------|-----------|
@@ -39,12 +39,12 @@ This tool is designed for creative agencies, marketers, and content creators wor
 | **Web Framework** | Flask |
 | **AI Model** | Google Gemini 2.5 Flash |
 | **Frontend** | HTML5, CSS3, Vanilla JavaScript |
-| **Styling** | Custom CSS (NOB-inspired design) |
+| **Styling** | Custom CSS  |
 | **API Integration** | Google Generative AI SDK |
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - Python 3.11 or higher
@@ -89,7 +89,7 @@ The application will start on `http://localhost:5000`
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 مُبدِع/
@@ -104,19 +104,13 @@ The application will start on `http://localhost:5000`
 │   └── index.html         # RTL Arabic web interface
 │
 └── static/
-    └── style.css          # Custom styling (NOB-inspired)
+    └── style.css          # Custom styling
 ```
 
-### Key Files
-
-- **`main.py`**: Contains the Flask server, API endpoint, and Gemini AI integration
-- **`templates/index.html`**: Single-page web interface with RTL support and form handling
-- **`static/style.css`**: Clean, minimal styling inspired by NOB Marketing Solutions
-- **`requirements.txt`**: All Python dependencies (Flask, Google Generative AI, etc.)
 
 ---
 
-## 🔄 How It Works
+## How It Works
 
 ### Step-by-Step Flow
 
@@ -159,7 +153,7 @@ generation_config = {
 
 ---
 
-## 🎨 Writing Style
+##  Writing Style
 
 The AI maintains a consistent Saudi-Arabic conversational style:
 
@@ -179,32 +173,9 @@ This tone example is embedded in the prompt to ensure consistency across all gen
 
 ---
 
-## 🌐 Deployment
 
-### Option 1: Production Server with Gunicorn
 
-```bash
-pip install gunicorn
-gunicorn --bind 0.0.0.0:5000 --workers 4 main:app
-```
-
-### Option 2: Platform as a Service (PaaS)
-
-Deploy to any modern hosting platform:
-
-| Platform | Deployment Method |
-|----------|------------------|
-| **Heroku** | `git push heroku main` |
-| **Railway** | Connect GitHub repository |
-| **Render** | Connect GitHub repository |
-| **PythonAnywhere** | Upload files, configure WSGI |
-| **DigitalOcean App Platform** | Connect GitHub repository |
-
-**Important:** Set environment variables (`GEMINI_API_KEY`, `SESSION_SECRET`) in your hosting platform's settings.
-
----
-
-## 🔐 Environment Variables
+## Environment Variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
@@ -213,7 +184,7 @@ Deploy to any modern hosting platform:
 
 ---
 
-## 📝 Usage Example
+##  Usage Example
 
 1. Open the web interface
 2. Fill in the form:
@@ -221,7 +192,7 @@ Deploy to any modern hosting platform:
    - **Product Description**: مشروب طبيعي منعش بنكهة الليمون والنعناع
    - **Target Audience**: شباب سعودي (18-30 سنة)
    - **Tone**: مرح، منعش، شبابي
-3. Click "تحليل البريف"
+3. Click "تحليل "
 4. Receive structured output:
    - Executive summary
    - Key insights
@@ -230,24 +201,17 @@ Deploy to any modern hosting platform:
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 This project was developed as a technical assignment. Contributions, issues, and feature requests are welcome.
 
 ---
 
-## 📄 License
+##  License
 
 This project is available for personal and commercial use.
 
----
-
-## 🙏 Acknowledgments
-
-- **Google Gemini AI** for powering the creative generation
-- **NOB Marketing Solutions** for design inspiration
-- **Saudi creative community** for tone and style guidance
 
 ---
 
-**Built with ❤️ for Saudi Arabian creative professionals**
+**Built with ❤️ for Saudi Arabian creative professionals by Shrouq Aldalbahi**

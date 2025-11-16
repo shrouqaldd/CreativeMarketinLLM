@@ -3,23 +3,31 @@ import os
 import json
 import google.generativeai as genai
 
+# Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get('SESSION_SECRET', 'dev-secret-key')
 
+# Configure Google Gemini API
 genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
+
+# Select model (Gemini 2.5 Flash)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 
+# Main Route: Handles Page Rendering + API Request
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         try:
+            # Parse incoming JSON request from frontend
             data = request.get_json()
             brief = data.get('brief', '')
 
+            # Validate user input
             if not brief:
                 return jsonify({'error': 'الرجاء إدخال نص الموجز'}), 400
 
+            # Build AI prompt for Saudi creative script generation
             prompt = f"""
 You are **The Creative Agent** — a Saudi creative director and marketing copywriter.
 Your job is to analyze marketing briefs (Arabic/English) and turn them into structured,
@@ -55,7 +63,6 @@ This example defines the tone. Follow its style, simplicity, and emotional flow.
 4. **Social Media Captions**
    Provide exactly 3 short Saudi-Arabic captions (no more than 3).
 
-
 ### INPUT BRIEF:
 {brief}
 
@@ -70,29 +77,38 @@ Return ONLY this JSON. No extra text.
 }}
 """
 
+            # Send prompt to Gemini and request a JSON response
 
-            response = model.generate_content(prompt,
-                                              generation_config={
-                                                  "temperature": 0.8,
-                                                  "max_output_tokens": 4096,
-                                                  "response_mime_type": "application/json"
-                                              })
+            response = model.generate_content(
+                prompt,
+                generation_config={
+                    "temperature": 0.8,
+                    "max_output_tokens": 4096,
+                    "response_mime_type":
+                    "application/json"  # Ensure output is pure JSON
+                })
 
+            # Extract text response
             result = response.text
 
             if not result:
                 return jsonify(
                     {'error': 'لم يتم الحصول على رد من الذكاء الاصطناعي'}), 500
 
+            # Parse JSON returned by Gemini
             parsed_result = json.loads(result)
 
+            # Return structured JSON back to front-end
             return jsonify(parsed_result)
 
         except Exception as e:
+            # Catch unexpected errors for debugging
             return jsonify({'error': f'حدث خطأ: {str(e)}'}), 500
 
+    # GET request → Render main HTML page
     return render_template('index.html')
 
 
+# App entry point (for local development)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
