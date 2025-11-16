@@ -6,12 +6,12 @@
 
 ---
 
-## 📋 Overview
+##  Overview
 
 This tool is designed for creative agencies, marketers, and content creators working with Saudi Arabian brands. It takes unstructured marketing briefs and converts them into polished, ready-to-use creative deliverables in Saudi conversational Arabic.
 
 **What it does:**
-- Analyzes marketing briefs (any language)
+- Analyzes marketing briefs 
 - Extracts key insights and strategic points
 - Generates emotional Saudi-Arabic creative scripts with storytelling
 - Creates social media captions optimized for Saudi audiences
@@ -19,7 +19,7 @@ This tool is designed for creative agencies, marketers, and content creators wor
 
 ---
 
-## ✨ Features
+## Features
 
 - **Brief Analysis**: Paste marketing briefs in Arabic, English, or both
 - **Intelligent Insights**: Extracts 3-5 key strategic points from the brief
