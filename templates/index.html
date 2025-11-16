@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوكيل الإبداعي - Creative Agent</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hero">
+        <h1 class="hero-title">مُبدِع</h1>
+        <p class="hero-subtitle"> مساعدك الذكي لتحويل موجزات التسويق إلى نص اعلاني جاهز</p>
+    </div>
+
+    <div class="container">
+        <div id="error" class="error-message" style="display: none;"></div>
+
+        <div class="form-card">
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="clientName" class="input-label">اسم العميل</label>
+                    <input 
+                        type="text" 
+                        id="clientName" 
+                        class="input-field" 
+                        placeholder="مثال: عصير ليمون">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="productDesc" class="input-label">وصف المنتج</label>
+                    <textarea 
+                        id="productDesc" 
+                        class="input-field textarea" 
+                        rows="4"
+                        placeholder="وصف مختصر للمنتج أو الخدمة..."></textarea>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="audience" class="input-label">الجمهور المستهدف</label>
+                    <textarea 
+                        id="audience" 
+                        class="input-field textarea" 
+                        rows="4"
+                        placeholder="من هم؟ أعمارهم؟ اهتماماتهم؟"></textarea>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label class="input-label">النبرة المطلوبة</label>
+                    <div class="tone-options">
+                        <label class="tone-pill">
+                            <input type="checkbox" name="tone" value="شبابي">
+                            <span>شبابي</span>
+                        </label>
+                        <label class="tone-pill">
+                            <input type="checkbox" name="tone" value="مرح">
+                            <span>مرح</span>
+                        </label>
+                        <label class="tone-pill">
+                            <input type="checkbox" name="tone" value="منعش">
+                            <span>منعش</span>
+                        </label>
+                        <label class="tone-pill">
+                            <input type="checkbox" name="tone" value="طبيعي">
+                            <span>طبيعي</span>
+                        </label>
+                        <label class="tone-pill">
+                            <input type="checkbox" name="tone" value="عملي">
+                            <span>عملي</span>
+                        </label>
+                        <label class="tone-pill">
+                            <input type="checkbox" name="tone" value="راقي">
+                            <span>راقي</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button id="analyzeBtn" class="analyze-btn">
+                <span id="btnText">تحليل </span>
+                <span id="btnLoader" class="loader" style="display: none;"></span>
+            </button>
+        </div>
+
+        <div id="results" class="results" style="display: none;">
+            <div class="result-card">
+                <h2 class="result-heading">الملخص</h2>
+                <div id="summary" class="result-text"></div>
+            </div>
+
+            <div class="result-card">
+                <h2 class="result-heading">النقاط الرئيسية</h2>
+                <ul id="insights" class="insights-list"></ul>
+            </div>
+
+            <div class="result-card featured">
+                <h2 class="result-heading">السيناريو الإبداعي</h2>
+                <div id="creativeIdeas" class="creative-script"></div>
+            </div>
+
+            <div class="result-card">
+                <h2 class="result-heading">منشورات السوشيال ميديا</h2>
+                <div id="socialCaptions" class="social-captions"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>    Developed by <strong>Shrouq Aldalbahi</strong>  Built for <strong>Cycls</strong>
+</p>
+    </footer>
+
+    <script>
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoader = document.getElementById('btnLoader');
+        const results = document.getElementById('results');
+        const error = document.getElementById('error');
+
+        analyzeBtn.addEventListener('click', async () => {
+            const clientName = document.getElementById('clientName').value;
+            const productDesc = document.getElementById('productDesc').value;
+            const audience = document.getElementById('audience').value;
+            const toneBoxes = document.querySelectorAll('input[name="tone"]:checked');
+            const tones = Array.from(toneBoxes).map(box => box.value);
+
+            if (!clientName || !productDesc || !audience) {
+                showError('الرجاء ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            const brief = `
+العميل: ${clientName}
+وصف المنتج: ${productDesc}
+الجمهور المستهدف: ${audience}
+النبرة المطلوبة: ${tones.join(', ') || 'غير محدد'}
+            `.trim();
+
+            hideError();
+            setLoading(true);
+
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ brief })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'حدث خطأ في المعالجة');
+                }
+
+                displayResults(data);
+            } catch (err) {
+                showError(err.message || 'حدث خطأ غير متوقع');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        function setLoading(loading) {
+            if (loading) {
+                btnText.style.display = 'none';
+                btnLoader.style.display = 'inline-block';
+                analyzeBtn.disabled = true;
+            } else {
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('summary').textContent = data.summary || 'لم يتم إنشاء ملخص';
+
+            const insightsList = document.getElementById('insights');
+            insightsList.innerHTML = '';
+            if (data.insights && Array.isArray(data.insights)) {
+                data.insights.forEach(insight => {
+                    const li = document.createElement('li');
+                    li.textContent = insight;
+                    insightsList.appendChild(li);
+                });
+            }
+
+            const creativeIdeas = document.getElementById('creativeIdeas');
+            creativeIdeas.innerHTML = '';
+            
+            if (data.creative_script) {
+                const div = document.createElement('div');
+                div.style.whiteSpace = 'pre-wrap';
+                div.textContent = data.creative_script;
+                creativeIdeas.appendChild(div);
+            }
+
+            const socialCaptions = document.getElementById('socialCaptions');
+            socialCaptions.innerHTML = '';
+            if (data.social_captions && Array.isArray(data.social_captions)) {
+                data.social_captions.forEach(caption => {
+                    const div = document.createElement('div');
+                    div.className = 'caption-box';
+                    div.textContent = caption;
+                    socialCaptions.appendChild(div);
+                });
+            }
+
+            results.style.display = 'block';
+            results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function showError(message) {
+            error.textContent = message;
+            error.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideError() {
+            error.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
