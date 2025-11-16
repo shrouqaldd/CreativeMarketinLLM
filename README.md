@@ -214,4 +214,4 @@ This project is available for personal and commercial use.
 
 ---
 
-**Built with ❤️ for Saudi Arabian creative professionals by Shrouq Aldalbahi**
+**Built for Saudi Arabian creative professionals by Shrouq Aldalbahi**
